@@ -19,8 +19,12 @@
 
 <portlet:defineObjects />
 
+<portlet:resourceURL var="resourceURL"></portlet:resourceURL>
+
 <%String tiposProductos=(String) request.getAttribute("tiposProductos");
-ClasificacionGrupo clasificacionGrupo=(ClasificacionGrupo) request.getAttribute("clasificacionGrupo");%>
+ClasificacionGrupo clasificacionGrupo=(ClasificacionGrupo) request.getAttribute("clasificacionGrupo");
+String recomendacion=(String) request.getAttribute("recomendacion");
+%>
 <style>
 <!--
 
@@ -36,17 +40,95 @@ ClasificacionGrupo clasificacionGrupo=(ClasificacionGrupo) request.getAttribute(
   display: flex;
   flex-direction: column;
 }
+.centered{
+	text-align:center;
+}
+.widget-title{
+	display: inline-block;
+    font-size: 30px;
+    color: #f39c12;
+    background: #fff;
+    border-radius: 46px;
+    padding: 6px 9px;
+    margin-top: 12px;
+}
+.clasificacion .nav.nav-stacked li{
+	width:100%;
+}
+.clasificacion .nav.nav-stacked li a{
+    padding: 4px;
+}
+.fixed{
+	position: fixed;
+    top: 0;
+    z-index: 12;
+}
+.clasificacion{
+	margin-bottom: 16px;
+}
+
 </style>
-<section class="content">
-      <div class="row">
-      	<div class="col-md-10">
+<section class="">
+	  <div class="row clasificacion" style="">
+			<div>
+				<div id="clasificacion" style="">
+					<div class="row">
+						<div class=" col-md-2 bg-yellow centered">
+							<div>
+								<span class="widget-title" id="clasificacionGrupo"><%=clasificacionGrupo.getClasificacionGrupo()%></span>
+							</div>
+	
+							<h3 class="widget-user-username">Clasificacion</h3>
+						</div>
+						<div class="col-md-10 box-footer">
+							<div class="row">
+								<div class="col-md-6">
+									<ul class="nav nav-stacked">
+										<li><a href="#"><span>Indicador grupo</span> <span
+												class="pull-right badge bg-blue" id="indicadorGrupo"><%=clasificacionGrupo.getIndicadorGrupo()%></span></a></li>
+										<li><a href="#"><span>Indicador TOP</span> <span
+												class="pull-right badge bg-aqua" id="indicadorTOP"><%=clasificacionGrupo.getIndicadorTop()%></span></a></li>
+										<li><a href="#"><span>Indicador productos A</span><span
+												class="pull-right badge bg-green" id="indicadorA"><%=clasificacionGrupo.getIndicadorA()%></span></a></li>
+										<li><a href="#"><span>Indicador productos B</span> <span
+												class="pull-right badge bg-red" id="indicadorB"><%=clasificacionGrupo.getIndicadorB()%></span></a></li>
+										<li><a href="#"><span>Indicador colaboracion</span> <span
+												class="pull-right badge bg-aqua" id="indicadorColaboracion"><%=clasificacionGrupo.getIndicadorColaboracion()%></span></a></li>
+									</ul>
+								</div>
+								<div class="col-md-6">
+									<ul class="nav nav-stacked">
+										<li><a href="#"><span>Indicador productos
+													apropiacion conocimiento</span><span
+												class="pull-right badge bg-green" id="indicadorASC"><%=clasificacionGrupo.getIndicadorApropiacionConocimiento()%></span></a></li>
+										<li><a href="#"><span>Indicador productos
+													formacion rec humano A</span> <span
+												class="pull-right badge bg-red" id="indicadorFRHA"><%=clasificacionGrupo.getIndicadorFormacionRecursoHumanoA()%></span></a></li>
+										<li><a href="#"><span>Indicador productos
+													formacion rec humano B</span> <span
+												class="pull-right badge bg-yellow" id="indicadorFRHB"><%=clasificacionGrupo.getIndicadorFormacionRecursoHumanoB()%></span></a></li>
+										<li><a href="#"><span>Indicador cohesion</span> <span
+												class="pull-right badge bg-blue" id="indicadorCohesion"><%=clasificacionGrupo.getIndicadorCohesion()%></span></a></li>
+										<li>
+											<button type="button" class="btn btn-block btn-warning btn-xs" onclick="cargarRecomendacion()">Cargar recomendacion</button>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+      <div class="row" style="">
+      	<div class="">
       		<div class="row">
 		        <!-- left column -->
 		        <div class="col-md-4">
 		          <!-- general form elements -->
 		          <div class="box box-primary">
 		            <div class="box-header with-border">
-		              <h3 class="box-title">Quick Example</h3>
+		              <h3 class="box-title">Productos TOP</h3>
 		            </div>
 		            <!-- /.box-header -->
 		            <!-- form start -->
@@ -65,7 +147,7 @@ ClasificacionGrupo clasificacionGrupo=(ClasificacionGrupo) request.getAttribute(
 		          <!-- general form elements -->
 		          <div class="box box-primary">
 		            <div class="box-header with-border">
-		              <h3 class="box-title">Quick Example</h3>
+		              <h3 class="box-title">Productos A</h3>
 		            </div>
 		            <!-- /.box-header -->
 		            <!-- form start -->
@@ -79,7 +161,7 @@ ClasificacionGrupo clasificacionGrupo=(ClasificacionGrupo) request.getAttribute(
 		          <!-- general form elements -->
 		          <div class="box box-primary">
 		            <div class="box-header with-border">
-		              <h3 class="box-title">Quick Example</h3>
+		              <h3 class="box-title">Productos B</h3>
 		            </div>
 		            <!-- /.box-header -->
 		            <!-- form start -->
@@ -93,7 +175,7 @@ ClasificacionGrupo clasificacionGrupo=(ClasificacionGrupo) request.getAttribute(
 		          <!-- general form elements -->
 		          <div class="box box-primary">
 		            <div class="box-header with-border">
-		              <h3 class="box-title">Quick Example</h3>
+		              <h3 class="box-title">Productos apropiacion social de conocimiento</h3>
 		            </div>
 		            <!-- /.box-header -->
 		            <!-- form start -->
@@ -107,7 +189,7 @@ ClasificacionGrupo clasificacionGrupo=(ClasificacionGrupo) request.getAttribute(
 		          <!-- general form elements -->
 		          <div class="box box-primary">
 		            <div class="box-header with-border">
-		              <h3 class="box-title">Quick Example</h3>
+		              <h3 class="box-title">Productos formacion recurso humano A</h3>
 		            </div>
 		            <!-- /.box-header -->
 		            <!-- form start -->
@@ -121,7 +203,7 @@ ClasificacionGrupo clasificacionGrupo=(ClasificacionGrupo) request.getAttribute(
 		          <!-- general form elements -->
 		          <div class="box box-primary">
 		            <div class="box-header with-border">
-		              <h3 class="box-title">Quick Example</h3>
+		              <h3 class="box-title">Productos formacion recurso humano B</h3>
 		            </div>
 		            <!-- /.box-header -->
 		            <!-- form start -->
@@ -131,65 +213,47 @@ ClasificacionGrupo clasificacionGrupo=(ClasificacionGrupo) request.getAttribute(
 		          </div>
 		          <!-- /.box -->
 		        </div>
+		        <div class="col-md-4">
+		          <!-- general form elements -->
+		          <div class="box box-primary">
+		            <div class="box-header with-border">
+		              <h3 class="box-title">Cohesion y colaboracion</h3>
+		            </div>
+		            <!-- /.box-header -->
+		            <!-- form start -->
+		              <div class="box-body">
+		              	<div class="form-group">
+		              		<label>Integrantes grupo</label>
+		              		<input type="text" class="form-control" id="integrantesGrupo">
+		              	</div>
+		              	<div class="form-group">
+		              		<label>Grupos colaboracion</label>
+		              		<input type="text" class="form-control" id="gruposColaboracion">
+		              	</div>                 
+		              </div>
+		              <!-- /.box-body -->
+		          </div>
+		          <!-- /.box -->
+		        </div>
 		    </div>
 	    </div>
-	    <div class="col-md-2">
-	    <div style="position: fixed;">
-	    	<div class="box">
-            
-            <div class="bg-yellow">
-              <div class="">
-                <span>A1</span>
-              </div>
-             
-              <h3 class="widget-user-username">Clasificacion</h3>
-            </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li><a href="#">Projects <span class="pull-right badge bg-blue">31</span></a></li>
-                <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
-                <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
-                <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li>
-              </ul>
-            </div>
-          </div>
-
-<!-- 	    	<div class="box box-primary" > -->
-<!-- 		            <div class="box-header with-border"> -->
-<!-- 		              <h3 class="box-title">Clasificacion simulada</h3> -->
-<!-- 		            </div> -->
-		            
-<!-- 		              <div class="box-body" id=""> -->
-<!-- 		                    <ul class="nav nav-stacked"> -->
-<!-- 							  <li><a href="#">Projects <span class="pull-right badge bg-blue">31</span></a></li> -->
-<!-- 							  <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li> -->
-<!-- 							  <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li> -->
-<!-- 							  <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li> -->
-<!-- 							</ul>          -->
-<!-- 		              </div> -->
-		             
-<!-- 		          </div> -->
-		          </div>
-	    </div>
-   	</div>
+		
+	</div>
 </section>
-<!-- <div id="productosA1" class="row"></div> -->
-<!-- <div id="productosA" class="row"></div> -->
-<!-- <div id="productosB" class="row"></div> -->
-<!-- <div id="productosASC" class="row"></div> -->
-<!-- <div id="productosFRH_A" class="row"></div> -->
-<!-- <div id="productosFRH_B" class="row"></div> -->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
 var productos=JSON.parse('<%=tiposProductos%>');
 var productosGrupo=JSON.parse('<%=clasificacionGrupo.getProductos()%>');
-var productosA1=productos.filter(producto => producto.c_tipo==="1");
-var productosA=productos.filter(producto => producto.c_tipo==="2");
-var productosB=productos.filter(producto => producto.c_tipo==="3");
-var productosASC=productos.filter(producto => producto.c_tipo==="4");
-var productosFRH_A=productos.filter(producto => producto.c_tipo==="5");
-var productosFRH_B=productos.filter(producto => producto.c_tipo==="6");
+var recomendacion='<%=recomendacion%>';
+var productosA1=productos.filter(producto => producto.c_tipo_produccion==="A1");
+var productosA=productos.filter(producto => producto.c_tipo_produccion==="A");
+var productosB=productos.filter(producto => producto.c_tipo_produccion==="B");
+var productosASC=productos.filter(producto => producto.c_tipo_produccion==="ASC");
+var productosFRH_A=productos.filter(producto => producto.c_tipo_produccion==="FRH_A");
+var productosFRH_B=productos.filter(producto => producto.c_tipo_produccion==="FRH_B");
+
+var productosColaboracion=productos.filter(producto => producto.c_area_conocimiento==="GNC" || producto.c_area_conocimiento==="DTI");
 
 llenarSeccion(productosA1,$('#productosA1'));
 llenarSeccion(productosA,$('#productosA'));
@@ -211,16 +275,14 @@ function llenarSeccion(productosSeccion,elemento){
 
 if(productosGrupo){
 	productosGrupo.forEach(function(productoGrupo){
-		$('#'+productoGrupo.c_categoria).val(productoGrupo.numero);
+		$('#'+productoGrupo.c_categoria).val(productoGrupo.i_num_productos);
 	});
 }
 
 function llenarBarras(){
 	$('.input-producto').each(function(i,inputProducto){
-		console.log(inputProducto.id);
 		var producto=buscarProducto(productosGrupo,inputProducto.id)[0];
-		var numProductosGrupo=producto?producto.numero:0;
-		console.log(numProductosGrupo);
+		var numProductosGrupo=producto?producto.i_num_productos:0;
 		var valorInput=inputProducto.value!==""?inputProducto.value:0;
 		var valorSimulacion=valorInput-numProductosGrupo;
 		$('#progress-'+inputProducto.id).html('');
@@ -228,14 +290,98 @@ function llenarBarras(){
 		if(valorSimulacion!==0){
 		$('#progress-'+inputProducto.id).append('<div class="progress-bar progress-bar-yellow" style="width: '+((valorSimulacion*100)/valorInput)+'%">'+valorSimulacion+'</div>');
 		}
-		console.log(i);
 		});
+}
+function llenarCohesionColaboracion(){
+	var colaboracion=0;
+	productosColaboracion.forEach(function(productoColaboracion){
+		if($('#'+productoColaboracion.k_codigo).val()!==""){
+			colaboracion+=parseInt($('#'+productoColaboracion.k_codigo).val());
+		}
+	});
+	$("#integrantesGrupo").val(colaboracion+1);
+	$("#gruposColaboracion").val(colaboracion+1);
 }
 
 function buscarProducto(productosFiltro,busqueda){
 	return productosFiltro.filter(producto => producto.c_categoria===busqueda);
 }
 
+$(document).ready(function(){
+	llenarBarras();
+	llenarCohesionColaboracion();
+	$(".input-producto").keyup(function(){
+		llenarBarras();
+		llenarCohesionColaboracion();
+		ejecutarSimulacion();
+	});
+});
 
+window.onscroll=function(){
+	var scroll = window.scrollY;
+	var elementY = document.getElementById("clasificacion").getBoundingClientRect().y;
+	
+	if(scroll <= elementY){
+		$("#clasificacion").removeClass("fixed");
+	}else{
+		$("#clasificacion").addClass("fixed");
+	}
+	};
+	
+function ejecutarSimulacion(){
+	var productosSimulacion=[];
+	$(".input-producto").each(function(i,inputProducto){
+		if(inputProducto.value!==""){
+		productosSimulacion.push({c_categoria:inputProducto.id,
+			i_num_productos:parseInt(inputProducto.value)});
+		}
+	});
+	
+	console.log(JSON.stringify(productosSimulacion));
+	
+	$.ajax({
+		url: '<%=resourceURL%>',
+		data:{'<portlet:namespace/>productos':JSON.stringify(productosSimulacion),
+			'<portlet:namespace/>colaboracion':'[{"i_integrantes_grupo":"'+$("#integrantesGrupo").val()+'","i_grupos_colaboracion":"'+$("#gruposColaboracion").val()+'"}]'},
+		type:'POST',
+		dataType:'json',
+		success: function(respuesta) {
+			console.log(respuesta);
+			if(respuesta){
+				$("#clasificacionGrupo").html(respuesta.clasificacionGrupo);
+				$("#indicadorGrupo").html(respuesta.indicadorGrupo);
+				$("#indicadorTOP").html(respuesta.indicadorTop);
+				$("#indicadorA").html(respuesta.indicadorA);
+				$("#indicadorB").html(respuesta.indicadorB);
+				$("#indicadorASC").html(respuesta.indicadorApropiacionConocimiento);
+				$("#indicadorFRHA").html(respuesta.indicadorFormacionRecursoHumanoA);
+				$("#indicadorFRHB").html(respuesta.indicadorFormacionRecursoHumanoB);
+			}
+		},
+		error: function() {
+	        console.log("No se ha podido obtener la información");
+	    }
+	});
+}
+
+function cargarRecomendacion(){
+	if(recomendacion!==""){
+		jsonRecomendacion=JSON.parse("["+recomendacion+"]");
+		jsonRecomendacion.forEach(function(productoRecomendacion){
+			if($('#'+productoRecomendacion.c_categoria).val()!==""){
+				console.log($('#'+productoRecomendacion.c_categoria).val());
+				console.log(productoRecomendacion.i_num_productos);
+				var cantidadProductos=parseInt($('#'+productoRecomendacion.c_categoria).val())+productoRecomendacion.i_num_productos;
+				console.log(cantidadProductos);
+				$('#'+productoRecomendacion.c_categoria).val(cantidadProductos);
+			}else{
+				$('#'+productoRecomendacion.c_categoria).val(productoRecomendacion.i_num_productos);
+			}
+		});
+		llenarBarras();
+		llenarCohesionColaboracion();
+		ejecutarSimulacion();
+	}
+}
 	
 </script>
